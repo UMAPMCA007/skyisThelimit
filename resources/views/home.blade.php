@@ -96,6 +96,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     $(document).ready(function(){
+        
         $('#question').html('Program to list number that remains the same when its digits are reserved ina given limit')
         $('#form2').hide();
         $('#form3').hide();
@@ -103,6 +104,7 @@
             $('#form1').show();
             $('#form2').hide();
             $('#form3').hide();
+            $('#form1').trigger("reset");
             $(this).addClass('active');
             $('#test2').removeClass('active');
             $('#test3').removeClass('active');
@@ -113,6 +115,7 @@
             $('#form1').hide();
             $('#form2').show();
             $('#form3').hide();
+            $('#form2').trigger("reset");
             $(this).addClass('active');
             $('#test1').removeClass('active');
             $('#test3').removeClass('active');
@@ -123,6 +126,7 @@
             $('#form1').hide();
             $('#form2').hide();
             $('#form3').show();
+            $('#form3').trigger("reset");
             $(this).addClass('active');
             $('#test1').removeClass('active');
             $('#test2').removeClass('active');
@@ -130,7 +134,7 @@
         });
 
         $('#submit').on('click',function(){
-            // submit showing form
+            $('#result').html(" ");
             var form = $('form:visible');
             var url = form.attr('action');
             var data = form.serialize();
