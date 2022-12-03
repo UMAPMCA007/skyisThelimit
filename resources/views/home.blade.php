@@ -31,17 +31,14 @@
                         @csrf
                         <div class="form-group">
                                         <label for="name">Limit1</label>
-                                        <input type="text" name="limit1" id="name" class="form-control"">
-                                        @error('limit1')
-                                            <span class="help-block
-                                            @error('name') has-error @enderror">{{ $message }}</span>
-                                        @enderror
-                                        <label for="name">Limit2</label>
+                                        <input type="text" name="limit1" id="name" class="form-control">
+                                        <span id="limit1" class="text-danger "> </span>
+                        </div> 
+                        <div class="form-group">              
+                                        <label for="name" class="mt-3">Limit2</label>
                                         <input type="text" name="limit2" id="name" class="form-control" >
-                                        @error('limit2')
-                                            <span class="help-block
-                                            @error('name') has-error @enderror">{{ $message }}</span>
-                                        @enderror
+                                        <span  id="limit2" class="text-danger"></span>
+                                        
                         </div>
                     </form>
                     <form class="col-md-6 offset-md-2" action="/form2" method="POST" id='form2'>
@@ -49,10 +46,7 @@
                         <div class="form-group">
                                         <label for="name">Enter Text</label>
                                         <input type="text" name="text" id="name" class="form-control">
-                                        @error('text')
-                                            <span class="help-block
-                                            @error('name') has-error @enderror">{{ $message }}</span>
-                                        @enderror
+                                        <span id="text" class="text-danger"></span>
                                         
                         </div>
                     </form>
@@ -61,22 +55,17 @@
                         <div class="form-group">
                                         <label for="name">Enter num1</label>
                                         <input type="text" name="num1" id="name" class="form-control">
-                                        @error('text')
-                                            <span class="help-block
-                                            @error('name') has-error @enderror">{{ $message }}</span>
-                                        @enderror
+                                        <span id="num1" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
                                         <label for="name">Enter num2</label>
                                         <input type="text" name="num2" id="name" class="form-control">
-                                        @error('text')
-                                            <span class="help-block
-                                            @error('name') has-error @enderror">{{ $message }}</span>
-                                        @enderror
+                                        <span id="num2" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
                                         <label for="name">Enter num3</label>
                                         <input type="text" name="num3" id="name" class="form-control">
-                                        @error('text')
-                                            <span class="help-block
-                                            @error('name') has-error @enderror">{{ $message }}</span>
-                                        @enderror
+                                        <span id="num3" class="text-danger"></span>
                                         
                         </div>
                     </form>
@@ -109,6 +98,12 @@
             $('#test2').removeClass('active');
             $('#test3').removeClass('active');
             $('#result').html('');
+            $("#limit1").html("");
+            $("#limit2").html("");
+            $('#text').html('');
+            $('#num1').html('');
+            $('#num2').html('');
+            $('#num3').html('');
         });
         $('#test2').click(function(){
             $("question").html('Reverse words and characters in a given string with out using strrev function');
@@ -120,6 +115,12 @@
             $('#test1').removeClass('active');
             $('#test3').removeClass('active');
             $('#result').html('');
+            $("#limit1").html("");
+            $("#limit2").html("");
+            $('#text').html('');
+            $('#num1').html('');
+            $('#num2').html('');
+            $('#num3').html('');
         });
         $('#test3').click(function(){
             $('#question').html('Write a program to find number of possible unique combinations for a 3 digit number');
@@ -131,11 +132,18 @@
             $('#test1').removeClass('active');
             $('#test2').removeClass('active');
             $('#result').html('');
+            $("#limit1").html("");
+            $("#limit2").html("");
+            $('#text').html('');
+            $('#num1').html('');
+            $('#num2').html('');
+            $('#num3').html('');
         });
 
         $('#submit').on('click',function(){
             $('#result').html(" ");
             var form = $('form:visible');
+           
             var url = form.attr('action');
             var data = form.serialize();
             
@@ -145,10 +153,46 @@
                 data: data,
                 success: function(response){
                     var result=response.result;
-                    // add , to result
                     var result = result.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     $('#result').html(result);
+                },
+                error: function (reject) {
+                if( reject.status === 422 ) {
+                    var errors = $.parseJSON(reject.responseText);
+                    if(errors.errors.limit1 && errors.errors.limit2 ){
+                        $("#limit1").html(errors.errors.limit1[0]);
+                        $("#limit2").html(errors.errors.limit2[0]);
+                    }else if(errors.errors.limit1){
+                        $("#limit1").html(errors.errors.limit1[0]);
+                    }else if(errors.errors.limit2){
+                        $("#limit2").html(errors.errors.limit2[0]);
+                    }
+                     if(errors.errors.text){
+                        $("#text").html(errors.errors.text[0]);
+                    }
+                    if(errors.errors.num1 && errors.errors.num2 && errors.errors.num3){
+                        $("#num1").html(errors.errors.num1[0]);
+                        $("#num2").html(errors.errors.num2[0]);
+                        $("#num3").html(errors.errors.num3[0]);
+                    }else if(errors.errors.num1 && errors.errors.num2){
+                        $("#num1").html(errors.errors.num1[0]);
+                        $("#num2").html(errors.errors.num2[0]);
+                    }else if(errors.errors.num2 && errors.errors.num3){
+                        $("#num2").html(errors.errors.num2[0]);
+                        $("#num3").html(errors.errors.num3[0]);
+                    }else if(errors.errors.num1 && errors.errors.num3){
+                        $("#num1").html(errors.errors.num1[0]);
+                        $("#num3").html(errors.errors.num3[0]);
+                    }else if( errors.errors.num1){
+                        $("#num1").html(errors.errors.num1[0]);
+                    }else if( errors.errors.num2){
+                        $("#num2").html(errors.errors.num2[0]);
+                    }else if( errors.errors.num3){
+                        $("#num3").html(errors.errors.num3[0]);
+                    }
                 }
+             }
+
             });
         });
         
